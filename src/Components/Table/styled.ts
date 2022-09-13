@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 export const Container = styled.table`
-width: 100%;
+width: 90%;
 background-color: #FFF;
 padding: 20px;
 box-shadow: 0px 0px 5px #CCC;
 border-radius: 10px;
-margin-top: 20px;
+margin: 1.875rem 4.375rem;
 
 `
 

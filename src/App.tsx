@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./AppStyled";
 import Table from "./Components/Table/Table";
-import { items } from "./Data/Items";
+import { itens } from "./Data/Itens";
 import { filterListByMonth, getCurrentMoth } from "./Helpers/DateFilter";
 import { Item } from "./Types/Item";
 
 function App() {
-  const [list, setList] = useState(items);
+  const [list, setList] = useState(itens);
   const [filterList, setFilterList] = useState<Item[]>([]);
   const [currentMonth, setCurrentMonth] = useState(getCurrentMoth());
 

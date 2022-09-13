@@ -15,7 +15,7 @@ const Table = ({list}: Props) => {
           <S.TableColumn width={100} >Data</S.TableColumn>
           <S.TableColumn width={130}>Categoria</S.TableColumn>
           <S.TableColumn>Título</S.TableColumn>
-          <S.TableColumn width={15} >Valor</S.TableColumn>
+          <S.TableColumn width={100} >Valor</S.TableColumn>
         </tr>
       </thead>
       <tbody>
