@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./AppStyled";
+import InfoArea from "./Components/InfoArea/InfoArea";
 import Table from "./Components/Table/Table";
 import { itens } from "./Data/Itens";
 import { filterListByMonth, getCurrentMoth } from "./Helpers/DateFilter";
@@ -14,13 +15,17 @@ function App() {
     setFilterList( filterListByMonth(list, currentMonth))
   }, [list, currentMonth])
 
+  const handleMonthChange = (newMonth:string) => {
+    setCurrentMonth(newMonth)
+  }
+
   return (
     <S.Container>
       <S.Header>
         <S.HeaderText>Sistema Financeiro</S.HeaderText>
       </S.Header>
       <S.Body>
-
+        <InfoArea currentMonth={currentMonth} onMonthChange={handleMonthChange}/>
         <Table list={filterList}/>
       </S.Body>
     </S.Container>
