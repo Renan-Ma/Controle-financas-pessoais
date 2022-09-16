@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as S from "./AppStyled";
 import InfoArea from "./Components/InfoArea/InfoArea";
+import InputArea from "./Components/InputArea/InputArea";
 import Table from "./Components/Table/Table";
 import { categories } from "./Data/Categories";
 import { itens } from "./Data/Itens";
@@ -38,6 +39,12 @@ function App() {
     setCurrentMonth(newMonth);
   };
 
+  const handleAddItem = (item: Item) => {
+    let newList = [...list];
+    newList.push(item);
+    setList(newList);
+  }
+
   return (
     <S.Container>
       <S.Header>
@@ -50,6 +57,7 @@ function App() {
           income={income}
           expense={expense}
         />
+        <InputArea onAdd={handleAddItem} />
         <Table list={filterList} />
       </S.Body>
     </S.Container>
