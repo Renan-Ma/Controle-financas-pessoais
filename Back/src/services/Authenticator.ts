@@ -8,10 +8,11 @@ export class Authenticator {
     });
   };
 
-   getTokenData = (token: string): authenticationData => {
+   public getTokenData = (token: string): authenticationData => {
     return jwt.verify(
       token,
       process.env.JWT_KEY as string
     ) as authenticationData;
   };
+  static getTokenData: any;
 }
