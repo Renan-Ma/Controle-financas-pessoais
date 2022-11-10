@@ -37,6 +37,6 @@ export default class FinanceBusiness {
 
     await this.financeData.createExpense(expense)
 
-    return "Dispesa criada com sucesso!"
+    return "Despesa criada com sucesso!"
   }
 }
