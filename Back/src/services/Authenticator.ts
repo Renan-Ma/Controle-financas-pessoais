@@ -8,7 +8,7 @@ export class Authenticator {
     });
   };
 
-   public getTokenData = (token: string): authenticationData => {
+   getTokenData = (token: string): authenticationData => {
     return jwt.verify(
       token,
       process.env.JWT_KEY as string

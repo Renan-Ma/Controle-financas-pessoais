@@ -16,6 +16,20 @@ POST http://localhost:3003/user/login
 Content-Type: application/json
 
 {
-   "email": "renan@gmail.com" ,
+   "email": "maria@gmail.com" ,
    "password": "12345"
+}
+
+###
+@token = {{ login.response.body.token }}
+# Post 
+POST http://localhost:3003/user/registerexpense
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+   "date": "2020-11-14" ,
+   "category": "rent",
+   "description": "jantar",
+   "value": 40
 }

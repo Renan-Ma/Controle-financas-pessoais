@@ -5,22 +5,24 @@ import { IdGenerator } from "../services/IdGenerator";
 import { FinanceInputDTO } from "../types/financeInputDTO";
 
 export default class FinanceBusiness {
-  constructor(private financeData: FinanceDatabase,
-    private idGenerator: IdGenerator
-    ) {}
+  constructor(
+    private financeData: FinanceDatabase,
+    private idGenerator: IdGenerator,
+    private authenticator: Authenticator
+  ) { }
 
-  public createExpense =async (newExpense:FinanceInputDTO, token: string) => {
-    const {date, category, description, value} = newExpense;
-    if(!date || !category || !description || !value) {
-      throw new Error ("Campos inválidos")
+  public createExpense = async (newExpense: FinanceInputDTO, token: string) => {
+    const { date, category, description, value } = newExpense;
+    if (!date || !category || !description || !value) {
+      throw new Error("Campos inválidos")
     }
 
-    if(!token){
+    if (!token) {
       throw new Error("Para acessar essa funcionalidoda é necessario estar logado")
     }
 
-    const authenticator = Authenticator.getTokenData(token)
-    if(!authenticator){
+    const authenticator = this.authenticator.getTokenData(token)
+    if (!authenticator) {
       throw new Error("Token inválido")
     }
 
@@ -32,11 +34,11 @@ export default class FinanceBusiness {
       category,
       description,
       value,
-      authenticator.id 
+      authenticator.id
     )
 
-    await this.financeData.createExpense(expense)
+    const response = await this.financeData.createExpense(expense)
 
-    return "Despesa criada com sucesso!"
+    return console.log(response)
   }
 }
