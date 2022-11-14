@@ -7,11 +7,12 @@ export default class FinanceDatabase extends BaseDatabase {
 
   public createExpense = async (expense: Expense) => {
     try {
-      this.getConnection()
-      .insert({
+      const response = this.getConnection()
+      .insert(
         expense
-      })
+      )
       .into(FinanceDatabase.TABLE_NAME)
+      return response
     } catch (error:any) {
       throw new BaseError(422, error.sqlMessage || error.message);
     }
