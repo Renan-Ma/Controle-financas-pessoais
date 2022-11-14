@@ -67,10 +67,10 @@ const Register = () => {
           label={"Senha"}
           type={"password"}
           autoComplete="current-password"
-          placeholder="Mínimo 6 caracteres"
+          placeholder="Mínimo 5 caracteres"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          inputProps={{ minLength: 6, title: "Senha mínima 6 caracteres" }}
+          inputProps={{ minLength: 5, title: "Senha mínima 5 caracteres" }}
           required
         />
 

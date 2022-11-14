@@ -1,12 +1,17 @@
+import axios from "axios";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { isMetaProperty } from "typescript";
 import InfoArea from "../../Components/InfoArea/InfoArea";
 import InputArea from "../../Components/InputArea/InputArea";
 import Table from "../../Components/Table/Table";
 import { categories } from "../../Data/Categories";
 import { itens } from "../../Data/Itens";
 import { filterListByMonth, getCurrentMoth } from "../../Helpers/DateFilter";
+import { TOKEN } from "../../Helpers/Token";
 import { Item } from "../../Types/Item";
 import * as S from "./styled";
+
 
 function Home() {
   const [list, setList] = useState(itens);
@@ -30,6 +35,7 @@ function Home() {
         incomeCount += filterList[i].value;
       }
     }
+    console.log(localStorage.getItem("token"))
 
     setIncome(incomeCount);
     setExpense(expenseCount);
@@ -39,16 +45,31 @@ function Home() {
     setCurrentMonth(newMonth);
   };
 
-  const handleAddItem = (item: Item) => {
-    let newList = [...list];
-    newList.push(item);
-    setList(newList);
+  const handleAddItem = async (item: Item) => {
+    const body = {
+      date: moment(item.date).format("yyyy-MM-DD"),
+      category: item.category,
+      description: item.title,
+      value: item.value
+    }
+    await axios
+      .post("http://localhost:3003/user/registerexpense", {
+        date: moment(item.date).format("yyyy-MM-DD"),
+        category: item.category,
+        description: item.title,
+        value: item.value
+      }, TOKEN)
+      .then((res) => {})
+      .catch((err) => {
+        alert(err.response.data.message);
+      })
+  
   }
 
   return (
     <S.Container>
       <S.Header>
-        <S.HeaderText>Sistema Financeiro</S.HeaderText>
+        {/* <S.HeaderText>Sistema Financeiro</S.HeaderText> */}
       </S.Header>
       <S.Body>
         <InfoArea

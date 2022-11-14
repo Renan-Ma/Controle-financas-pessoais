@@ -25,11 +25,10 @@ const Login = () => {
     await axios
       .post("http://localhost:3003/user/login", body)
       .then((res) => {
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("token", res.data.token as string);
         goToHome(navigate);
       })
       .catch((err) => {
-        // alert(err.response.data.message);
         alert("Email ou senha não cadastrados");
       });
   };
@@ -53,10 +52,10 @@ const Login = () => {
           label={"Senha"}
           type={"password"}
           autoComplete="current-password"
-          placeholder="Mínimo 6 caracteres"
+          placeholder="Mínimo 5 caracteres"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          inputProps={{ minLength: 6, title: "Senha mínima 6 caracteres" }}
+          inputProps={{ minLength: 5, title: "Senha mínima 5 caracteres" }}
           required
         />
         <S.ButtonStyled type="submit"> Entrar</S.ButtonStyled>

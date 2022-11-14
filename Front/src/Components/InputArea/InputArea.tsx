@@ -16,7 +16,7 @@ const InputArea = ({ onAdd }: Props) => {
 
   let categoryKeys: string[] = Object.keys(categories);
 
-  console.log(dateField, categoryField, titleField, valueField)
+  // console.log(dateField, categoryField, titleField, valueField)
 
   const handleAddEvent = () => {
     let errors: string[] = [];
@@ -43,7 +43,7 @@ const InputArea = ({ onAdd }: Props) => {
         title: titleField,
         value: valueField,
       });
-      clearFields();
+      // clearFields();
     }
   };
 
