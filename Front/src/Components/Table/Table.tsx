@@ -5,10 +5,11 @@ import TableItem from "../TableItem/TableItem";
 
 type Props = {
   list: Item[];
+  onEdit: (item: Item) => void;
   onDelete: (id: string) => void;
 };
 
-const Table = ({ list, onDelete }: Props) => {
+const Table = ({ list, onEdit, onDelete }: Props) => {
   return (
     <S.Container>
       <thead>
@@ -17,13 +18,13 @@ const Table = ({ list, onDelete }: Props) => {
           <S.TableColumn width={130}>Categoria</S.TableColumn>
           <S.TableColumn>Título</S.TableColumn>
           <S.TableColumn width={100}>Valor</S.TableColumn>
-          <S.TableColumn width={50}></S.TableColumn>
+          <S.TableColumn width={80}></S.TableColumn>
         </tr>
       </thead>
       <tbody>
-        {list.map((item, index) => {
-          return <TableItem key={index} item={item} onDelete={onDelete} />;
-        })}
+        {list.map((item, index) => (
+          <TableItem key={index} item={item} onEdit={onEdit} onDelete={onDelete} />
+        ))}
       </tbody>
     </S.Container>
   );

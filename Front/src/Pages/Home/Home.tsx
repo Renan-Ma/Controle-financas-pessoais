@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../../Components/ConfirmModal/ConfirmModal";
+import EditModal from "../../Components/EditModal/EditModal";
 import InfoArea from "../../Components/InfoArea/InfoArea";
 import InputArea from "../../Components/InputArea/InputArea";
 import Table from "../../Components/Table/Table";
@@ -8,7 +9,7 @@ import Toast from "../../Components/Toast/Toast";
 import { categories } from "../../Data/Categories";
 import { getCurrentMoth } from "../../Helpers/DateFilter";
 import { useProtectedPage } from "../../Hooks/useProtectedPage";
-import { createExpense, deleteExpense, getExpenses } from "../../Services/FinanceService";
+import { createExpense, deleteExpense, getExpenses, updateExpense } from "../../Services/FinanceService";
 import { Item } from "../../Types/Item";
 import * as S from "./styled";
 
@@ -23,6 +24,7 @@ function Home() {
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<ToastState>(null);
 
@@ -97,6 +99,23 @@ function Home() {
     setPendingDeleteId(null);
   };
 
+  const handleEditItem = (item: Item) => {
+    setEditingItem(item);
+  };
+
+  const handleSaveEdit = async (item: Item) => {
+    if (!item.id) return;
+    try {
+      await updateExpense(item.id, item);
+      await fetchExpenses(currentMonth);
+      showToast("Despesa atualizada com sucesso!", "success");
+    } catch (err: any) {
+      showToast(err.response ? err.response.data : "Erro ao atualizar despesa", "error");
+    } finally {
+      setEditingItem(null);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
@@ -109,6 +128,13 @@ function Home() {
           message="Deseja excluir esta despesa?"
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
+        />
+      )}
+      {editingItem && (
+        <EditModal
+          item={editingItem}
+          onSave={handleSaveEdit}
+          onCancel={() => setEditingItem(null)}
         />
       )}
       {toast && (
@@ -132,7 +158,7 @@ function Home() {
         {loading ? (
           <S.LoadingText>Carregando...</S.LoadingText>
         ) : (
-          <Table list={list} onDelete={handleDeleteItem} />
+          <Table list={list} onEdit={handleEditItem} onDelete={handleDeleteItem} />
         )}
       </S.Body>
     </S.Container>

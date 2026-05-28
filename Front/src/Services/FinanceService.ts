@@ -20,6 +20,19 @@ export const getExpenses = async (month: string): Promise<Item[]> => {
   }));
 };
 
+export const updateExpense = async (id: string, item: Item): Promise<void> => {
+  await axios.put(
+    `${BASE_URL}/expense/${id}`,
+    {
+      date: moment(item.date).format("YYYY-MM-DD"),
+      category: item.category,
+      description: item.title,
+      value: item.value,
+    },
+    getToken()
+  );
+};
+
 export const deleteExpense = async (id: string): Promise<void> => {
   await axios.delete(`${BASE_URL}/expense/${id}`, getToken());
 };

@@ -16,6 +16,19 @@ export const Value = styled.div<{ color: string }>`
   color: ${(props) => props.color};
 `;
 
+export const EditButton = styled.button`
+  background: none;
+  border: none;
+  color: darkblue;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  &:hover {
+    background-color: #eef;
+  }
+`;
+
 export const DeleteButton = styled.button`
   background: none;
   border: none;

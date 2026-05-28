@@ -6,10 +6,11 @@ import * as S from "./styled";
 
 type Props = {
   item: Item;
+  onEdit: (item: Item) => void;
   onDelete: (id: string) => void;
 };
 
-const TableItem = ({ item, onDelete }: Props) => {
+const TableItem = ({ item, onEdit, onDelete }: Props) => {
   return (
     <S.Container>
       <S.TableColumn> {formatDate(item.date)} </S.TableColumn>
@@ -25,6 +26,7 @@ const TableItem = ({ item, onDelete }: Props) => {
         </S.Value>
       </S.TableColumn>
       <S.TableColumn>
+        <S.EditButton onClick={() => onEdit(item)}>✎</S.EditButton>
         <S.DeleteButton onClick={() => item.id && onDelete(item.id)}>✕</S.DeleteButton>
       </S.TableColumn>
     </S.Container>
