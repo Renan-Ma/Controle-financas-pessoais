@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Toast from "../../Components/Toast/Toast";
 import { goToHome, goToRegister } from "../../Router/coordinator";
 import * as S from "./styled";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -24,12 +26,15 @@ const Login = () => {
         goToHome(navigate);
       })
       .catch(() => {
-        alert("Email ou senha não cadastrados");
+        setErrorMsg("Email ou senha não cadastrados");
       });
   };
 
   return (
     <S.Main>
+      {errorMsg && (
+        <Toast message={errorMsg} type="error" onClose={() => setErrorMsg(null)} />
+      )}
       <S.Header>
         <S.HeaderTitle>Controle Financeiro</S.HeaderTitle>
       </S.Header>

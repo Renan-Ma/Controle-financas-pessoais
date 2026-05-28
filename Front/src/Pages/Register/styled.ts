@@ -36,6 +36,12 @@ export const Card = styled.div`
   width: 100%;
   max-width: 380px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 480px) {
+    padding: 24px 16px;
+    border-radius: 0;
+    box-shadow: none;
+  }
 `;
 
 export const CardTitle = styled.h2`

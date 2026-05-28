@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Toast from "../../Components/Toast/Toast";
 import { goToHome, goToLogin } from "../../Router/coordinator";
 import * as S from "./styled";
 
@@ -9,6 +10,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
@@ -25,12 +27,15 @@ const Register = () => {
         goToHome(navigate);
       })
       .catch(() => {
-        alert("Houve um erro, tente novamente mais tarde");
+        setErrorMsg("Houve um erro, tente novamente mais tarde");
       });
   };
 
   return (
     <S.Main>
+      {errorMsg && (
+        <Toast message={errorMsg} type="error" onClose={() => setErrorMsg(null)} />
+      )}
       <S.Header>
         <S.HeaderTitle>Controle Financeiro</S.HeaderTitle>
       </S.Header>

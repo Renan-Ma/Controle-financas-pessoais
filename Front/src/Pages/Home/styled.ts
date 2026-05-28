@@ -26,18 +26,16 @@ export const LogoutButton = styled.button`
   }
 `;
 
+export const Body = styled.div`
+  max-width: 980px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+  padding: 0 16px;
+`;
+
 export const LoadingText = styled.p`
   text-align: center;
   color: #888;
   margin-top: 40px;
   font-size: 14px;
 `;
-
-export const HeaderText = styled.h1`
-  color: white;
-  padding-top: 30px;
-`;
-
-export const Body = styled.div`margin: auto;
-max-width: 980px;
-margin-bottom: 50px;`;
