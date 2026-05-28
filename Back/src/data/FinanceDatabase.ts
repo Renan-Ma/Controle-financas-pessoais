@@ -22,9 +22,9 @@ export default class FinanceDatabase extends BaseDatabase {
     try {
       const result = this.getConnection()
       .select()
+      .from(FinanceDatabase.TABLE_NAME)
       .whereBetween("date", [dateStart, dateEnd])
       .andWhere("author_id", author)
-      .into(FinanceDatabase.TABLE_NAME)
 
       return result
     } catch (error:any) {

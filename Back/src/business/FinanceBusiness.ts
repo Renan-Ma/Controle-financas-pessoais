@@ -44,8 +44,6 @@ export default class FinanceBusiness {
   }
 
   public getExpense = async (dateExpense: any, token: string) => {
-    const { date } = dateExpense;
-    // console.log(dateExpense)
     if (!dateExpense) {
       throw new Error("Campos inválidos")
     }
@@ -54,14 +52,12 @@ export default class FinanceBusiness {
       throw new Error("Para acessar essa funcionalidoda é necessario estar logado")
     }
 
-    // console.log(dateExpense)
-
     const authenticator = this.authenticator.getTokenData(token)
     if (!authenticator) {
       throw new Error("Token inválido")
     }
-    const dateStart = moment(dateExpense).format("yyyy-MM-01")
-    const dateEnd = moment(dateExpense).format("yyyy-MM-30")
+    const dateStart = moment(dateExpense).startOf("month").format("YYYY-MM-DD")
+    const dateEnd = moment(dateExpense).endOf("month").format("YYYY-MM-DD")
 
     const author = authenticator.id
 
