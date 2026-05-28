@@ -30,6 +30,25 @@ export default class FinanceController {
     }
   }
 
+  updateExpense = async (req: Request, res: Response) => {
+    try {
+      const token = req.headers.authorization!;
+      const { id } = req.params;
+      const { date, category, description, value } = req.body;
+
+      await this.financeBusiness.updateExpense(id, token, { date, category, description, value });
+
+      res.status(200).send({ message: "Despesa atualizada com sucesso" });
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(400).send(error.message);
+      }
+      res.status(500).send("Internal server error");
+    } finally {
+      BaseDatabase.destroyConnection();
+    }
+  }
+
   deleteExpense = async (req: Request, res: Response) => {
     try {
       const token = req.headers.authorization!;
