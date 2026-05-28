@@ -1,81 +1,83 @@
 import React, { useState } from "react";
-import * as S from "./styled";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-// import { BASE_URL } from "../../Constants/url";
 import { useNavigate } from "react-router-dom";
-import { goToHome, goToRegister } from "../../Router/coordinator";
+import { goToHome, goToLogin } from "../../Router/coordinator";
+import * as S from "./styled";
 
 const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
 
   const navigate = useNavigate();
 
   const onSubmitRegister = (e: any) => {
     e.preventDefault();
-    const userRegister = {
-      name,
-      email,
-      password,
-    };
-    cadastroApi(userRegister);
+    cadastroApi({ name, email, password });
   };
 
   const cadastroApi = async (body: object) => {
     await axios
       .post("http://localhost:3003/user/singup", body)
       .then((res) => {
-        console.log(res)
         localStorage.setItem("token", res.data.token);
         goToHome(navigate);
       })
-      .catch((err) => {
-        console.log(err.response)
-        // alert(err.response.data.message);
+      .catch(() => {
         alert("Houve um erro, tente novamente mais tarde");
       });
   };
 
   return (
     <S.Main>
-      {/* <S.Title>Sistema Financeiro</S.Title> */}
-      <S.Form onSubmit={onSubmitRegister}>
-        <TextField
-          id="outlined-name-input"
-          label={"Nome"}
-          type={"nome"}
-          autoComplete="current-nome"
-          placeholder="Nome"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          required
-        />
-        <TextField
-          id="outlined-basic"
-          label="E-mail"
-          type={"email"}
-          variant="outlined"
-          placeholder="email@email.com"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          required
-        />
-        <TextField
-          id="outlined-password-input"
-          label={"Senha"}
-          type={"password"}
-          autoComplete="current-password"
-          placeholder="Mínimo 5 caracteres"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          inputProps={{ minLength: 5, title: "Senha mínima 5 caracteres" }}
-          required
-        />
-
-        <S.ButtonStyled type="submit"> Cadastrar</S.ButtonStyled>
-      </S.Form>
+      <S.Header>
+        <S.HeaderTitle>Controle Financeiro</S.HeaderTitle>
+      </S.Header>
+      <S.Content>
+        <S.Card>
+          <S.CardTitle>Criar conta</S.CardTitle>
+          <S.Form onSubmit={onSubmitRegister}>
+            <TextField
+              label="Nome"
+              type="text"
+              placeholder="Seu nome"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              fullWidth
+            />
+            <TextField
+              label="E-mail"
+              type="email"
+              variant="outlined"
+              placeholder="email@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              fullWidth
+            />
+            <TextField
+              label="Senha"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Mínimo 5 caracteres"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              inputProps={{ minLength: 5 }}
+              required
+              fullWidth
+            />
+            <S.ButtonStyled type="submit">Cadastrar</S.ButtonStyled>
+          </S.Form>
+          <S.Footer>
+            Já possui cadastro?{" "}
+            <S.ButtonBack onClick={() => goToLogin(navigate)}>
+              Fazer login
+            </S.ButtonBack>
+          </S.Footer>
+        </S.Card>
+      </S.Content>
     </S.Main>
   );
 };

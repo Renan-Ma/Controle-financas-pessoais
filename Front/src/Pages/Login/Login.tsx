@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import * as S from "./styled";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-// import { BASE_URL } from "../../Constants/url";
 import { useNavigate } from "react-router-dom";
 import { goToHome, goToRegister } from "../../Router/coordinator";
+import * as S from "./styled";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,11 +13,7 @@ const Login = () => {
 
   const onSubmitLogin = (e: any) => {
     e.preventDefault();
-    const userLogin = {
-      email,
-      password,
-    };
-    loginApi(userLogin);
+    loginApi({ email, password });
   };
 
   const loginApi = async (body: object) => {
@@ -28,44 +23,51 @@ const Login = () => {
         localStorage.setItem("token", res.data.token as string);
         goToHome(navigate);
       })
-      .catch((err) => {
+      .catch(() => {
         alert("Email ou senha não cadastrados");
       });
   };
 
   return (
     <S.Main>
-      {/* <S.Title>Sistema Financeiro</S.Title> */}
-      <S.Form onSubmit={onSubmitLogin}>
-        <TextField
-          id="outlined-basic"
-          label="E-mail"
-          type={"email"}
-          variant="outlined"
-          placeholder="email@email.com"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          required
-        />
-        <TextField
-          id="outlined-password-input"
-          label={"Senha"}
-          type={"password"}
-          autoComplete="current-password"
-          placeholder="Mínimo 5 caracteres"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          inputProps={{ minLength: 5, title: "Senha mínima 5 caracteres" }}
-          required
-        />
-        <S.ButtonStyled type="submit"> Entrar</S.ButtonStyled>
-      </S.Form>
-      <p>
-        Não possui cadastro?
-        <S.ButtonRegistration onClick={() => goToRegister(navigate)}>
-          Clique aqui
-        </S.ButtonRegistration>
-      </p>
+      <S.Header>
+        <S.HeaderTitle>Controle Financeiro</S.HeaderTitle>
+      </S.Header>
+      <S.Content>
+        <S.Card>
+          <S.CardTitle>Entrar</S.CardTitle>
+          <S.Form onSubmit={onSubmitLogin}>
+            <TextField
+              label="E-mail"
+              type="email"
+              variant="outlined"
+              placeholder="email@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              fullWidth
+            />
+            <TextField
+              label="Senha"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Mínimo 5 caracteres"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              inputProps={{ minLength: 5 }}
+              required
+              fullWidth
+            />
+            <S.ButtonStyled type="submit">Entrar</S.ButtonStyled>
+          </S.Form>
+          <S.Footer>
+            Não possui cadastro?{" "}
+            <S.ButtonRegistration onClick={() => goToRegister(navigate)}>
+              Clique aqui
+            </S.ButtonRegistration>
+          </S.Footer>
+        </S.Card>
+      </S.Content>
     </S.Main>
   );
 };

@@ -15,3 +15,16 @@ export const Category = styled.div<{ color: string }>`
 export const Value = styled.div<{ color: string }>`
   color: ${(props) => props.color};
 `;
+
+export const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  &:hover {
+    background-color: #fdecea;
+  }
+`;

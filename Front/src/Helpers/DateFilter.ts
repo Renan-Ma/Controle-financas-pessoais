@@ -23,13 +23,21 @@ export const filterListByMonth = (list: Item[], date: string): Item[] => {
 
 export const formatDate = (date: Date): string => {
   let year = date.getFullYear();
-  let month = date.getMonth();
+  let month = date.getMonth() + 1;
   let day = date.getDate();
 
   return `${addZeroToDate(day)}/${addZeroToDate(month)}/${year}`;
 };
 
 const addZeroToDate = (n: number): string => (n < 10 ? `0${n}` : `${n}`);
+
+export const formatCurrency = (value: number): string =>
+  value.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: value % 1 === 0 ? 0 : 2,
+    maximumFractionDigits: 2,
+  });
 
 export const formatCurrentMonth = (currentMonth: string): string => {
   let [year, month] = currentMonth.split("-");
@@ -52,5 +60,5 @@ export const formatCurrentMonth = (currentMonth: string): string => {
 
 export const newDateAdjusted = (dateField: string) => {
   let [year, month, day] = dateField.split('-')
-  return new Date(parseInt(year), parseInt(month), parseInt(day))
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
 }

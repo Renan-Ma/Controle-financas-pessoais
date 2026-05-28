@@ -1,5 +1,5 @@
-export const TOKEN = {
+export const getToken = () => ({
   headers: {
     authorization: localStorage.getItem("token"),
   },
-};
+});

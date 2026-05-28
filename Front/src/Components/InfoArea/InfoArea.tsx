@@ -15,18 +15,16 @@ const InfoArea = ({ currentMonth, onMonthChange, income, expense }: Props) => {
     let [year, month] = currentMonth.split("-");
     let currentDate = new Date(parseInt(year), parseInt(month) - 1, 1);
     currentDate.setMonth(currentDate.getMonth() - 1);
-    onMonthChange(
-      `${currentDate.getFullYear()} - ${currentDate.getMonth() + 1}`
-    );
+    const m = currentDate.getMonth() + 1;
+    onMonthChange(`${currentDate.getFullYear()}-${m < 10 ? "0" + m : m}`);
   };
 
   const handleNextMonth = () => {
     let [year, month] = currentMonth.split("-");
     let currentDate = new Date(parseInt(year), parseInt(month) - 1, 1);
     currentDate.setMonth(currentDate.getMonth() + 1);
-    onMonthChange(
-      `${currentDate.getFullYear()} - ${currentDate.getMonth() + 1}`
-    );
+    const m = currentDate.getMonth() + 1;
+    onMonthChange(`${currentDate.getFullYear()}-${m < 10 ? "0" + m : m}`);
   };
   return (
     <S.Container>

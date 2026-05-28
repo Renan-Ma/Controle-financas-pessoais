@@ -9,7 +9,8 @@ type Props = {
 };
 
 const InputArea = ({ onAdd }: Props) => {
-  const [dateField, setDateField] = useState("");
+  const today = new Date().toISOString().split("T")[0];
+  const [dateField, setDateField] = useState(today);
   const [categoryField, setCategoryField] = useState("");
   const [titleField, setTitleField] = useState("");
   const [valueField, setValueField] = useState(0);
@@ -48,7 +49,7 @@ const InputArea = ({ onAdd }: Props) => {
   };
 
   const clearFields = () => {
-    setDateField("");
+    setDateField(today);
     setCategoryField("");
     setTitleField("");
     setValueField(0);
@@ -92,6 +93,9 @@ const InputArea = ({ onAdd }: Props) => {
         <S.Input
           type="number"
           value={valueField}
+          min="0"
+          step="0.01"
+          placeholder="0,00"
           onChange={(e) => setValueField(parseFloat(e.target.value))}
         />
       </S.InputLabel>

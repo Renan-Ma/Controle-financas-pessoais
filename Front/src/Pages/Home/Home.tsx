@@ -1,75 +1,125 @@
-import axios from "axios";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { isMetaProperty } from "typescript";
+import { useNavigate } from "react-router-dom";
+import ConfirmModal from "../../Components/ConfirmModal/ConfirmModal";
 import InfoArea from "../../Components/InfoArea/InfoArea";
 import InputArea from "../../Components/InputArea/InputArea";
 import Table from "../../Components/Table/Table";
+import Toast from "../../Components/Toast/Toast";
 import { categories } from "../../Data/Categories";
-import { itens } from "../../Data/Itens";
-import { filterListByMonth, getCurrentMoth } from "../../Helpers/DateFilter";
-import { TOKEN } from "../../Helpers/Token";
+import { getCurrentMoth } from "../../Helpers/DateFilter";
+import { useProtectedPage } from "../../Hooks/useProtectedPage";
+import { createExpense, deleteExpense, getExpenses } from "../../Services/FinanceService";
 import { Item } from "../../Types/Item";
 import * as S from "./styled";
 
+type ToastState = { message: string; type: "success" | "error" } | null;
 
 function Home() {
-  const [list, setList] = useState(itens);
-  const [filterList, setFilterList] = useState<Item[]>([]);
+  useProtectedPage();
+
+  const navigate = useNavigate();
+  const [list, setList] = useState<Item[]>([]);
   const [currentMonth, setCurrentMonth] = useState(getCurrentMoth());
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<ToastState>(null);
+
+  const showToast = (message: string, type: "success" | "error") => {
+    setToast({ message, type });
+  };
+
+  const fetchExpenses = async (month: string) => {
+    setLoading(true);
+    try {
+      const items = await getExpenses(month);
+      setList(items);
+    } catch (err) {
+      showToast("Erro ao buscar despesas", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setFilterList(filterListByMonth(list, currentMonth));
-  }, [list, currentMonth]);
+    fetchExpenses(currentMonth);
+  }, [currentMonth]);
 
   useEffect(() => {
     let incomeCount = 0;
     let expenseCount = 0;
 
-    for (let i in filterList) {
-      if (categories[filterList[i].category].expense) {
-        expenseCount += filterList[i].value;
+    for (let i in list) {
+      if (categories[list[i].category] && categories[list[i].category].expense) {
+        expenseCount += list[i].value;
       } else {
-        incomeCount += filterList[i].value;
+        incomeCount += list[i].value;
       }
     }
 
     setIncome(incomeCount);
     setExpense(expenseCount);
-  }, [filterList]);
+  }, [list]);
 
   const handleMonthChange = (newMonth: string) => {
     setCurrentMonth(newMonth);
   };
 
   const handleAddItem = async (item: Item) => {
-    // const body = {
-    //   date: moment(item.date).format("yyyy-MM-DD"),
-    //   category: item.category,
-    //   description: item.title,
-    //   value: item.value
-    // }
-    console.log(item.date)
-    await axios
-      .post("http://localhost:3003/user/registerexpense", {
-        date: moment(item.date).format("yyyy-MM-DD"),
-        category: item.category,
-        description: item.title,
-        value: item.value
-      }, TOKEN)
-      .then((res) => {})
-      .catch((err) => {
-        alert(err.response.data.message);
-      })
-  
-  }
+    try {
+      await createExpense(item);
+      await fetchExpenses(currentMonth);
+      showToast("Despesa cadastrada com sucesso!", "success");
+    } catch (err: any) {
+      showToast(err.response ? err.response.data : "Erro ao cadastrar despesa", "error");
+    }
+  };
+
+  const handleDeleteItem = (id: string) => {
+    setPendingDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return;
+    try {
+      await deleteExpense(pendingDeleteId);
+      await fetchExpenses(currentMonth);
+      showToast("Despesa excluída com sucesso!", "success");
+    } catch (err: any) {
+      showToast(err.response ? err.response.data : "Erro ao excluir despesa", "error");
+    } finally {
+      setPendingDeleteId(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setPendingDeleteId(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
   return (
     <S.Container>
+      {pendingDeleteId && (
+        <ConfirmModal
+          message="Deseja excluir esta despesa?"
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
       <S.Header>
-        {/* <S.HeaderText>Sistema Financeiro</S.HeaderText> */}
+        <S.LogoutButton onClick={handleLogout}>Sair</S.LogoutButton>
       </S.Header>
       <S.Body>
         <InfoArea
@@ -79,7 +129,11 @@ function Home() {
           expense={expense}
         />
         <InputArea onAdd={handleAddItem} />
-        <Table list={filterList} />
+        {loading ? (
+          <S.LoadingText>Carregando...</S.LoadingText>
+        ) : (
+          <Table list={list} onDelete={handleDeleteItem} />
+        )}
       </S.Body>
     </S.Container>
   );
