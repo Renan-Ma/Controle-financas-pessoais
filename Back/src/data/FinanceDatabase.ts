@@ -18,6 +18,17 @@ export default class FinanceDatabase extends BaseDatabase {
     }
   }
 
+  public deleteExpense = async (id: string, authorId: string) => {
+    try {
+      await this.getConnection()
+        .from(FinanceDatabase.TABLE_NAME)
+        .where({ id, author_id: authorId })
+        .delete();
+    } catch (error: any) {
+      throw new BaseError(422, error.sqlMessage || error.message);
+    }
+  }
+
   public getExpense = async (dateStart:string, dateEnd:string, author:string) => {
     try {
       const result = this.getConnection()

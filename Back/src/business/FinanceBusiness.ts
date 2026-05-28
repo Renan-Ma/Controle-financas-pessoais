@@ -43,6 +43,16 @@ export default class FinanceBusiness {
     return response
   }
 
+  public deleteExpense = async (id: string, token: string) => {
+    if (!id) throw new Error("Id inválido");
+    if (!token) throw new Error("Para acessar essa funcionalidade é necessário estar logado");
+
+    const authenticator = this.authenticator.getTokenData(token);
+    if (!authenticator) throw new Error("Token inválido");
+
+    await this.financeData.deleteExpense(id, authenticator.id);
+  }
+
   public getExpense = async (dateExpense: any, token: string) => {
     if (!dateExpense) {
       throw new Error("Campos inválidos")
