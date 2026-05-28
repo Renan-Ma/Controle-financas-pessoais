@@ -17,4 +17,19 @@ export default class FinanceDatabase extends BaseDatabase {
       throw new BaseError(422, error.sqlMessage || error.message);
     }
   }
+
+  public getExpense = async (dateStart:string, dateEnd:string, author:string) => {
+    try {
+      const result = this.getConnection()
+      .select()
+      .whereBetween("date", [dateStart, dateEnd])
+      .andWhere("author_id", author)
+      .into(FinanceDatabase.TABLE_NAME)
+
+      return result
+    } catch (error:any) {
+      console.log("error")
+      throw new BaseError(422, error.sqlMessage || error.message);
+    }
+  }
 }

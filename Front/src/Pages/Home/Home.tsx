@@ -35,7 +35,6 @@ function Home() {
         incomeCount += filterList[i].value;
       }
     }
-    console.log(localStorage.getItem("token"))
 
     setIncome(incomeCount);
     setExpense(expenseCount);
@@ -46,12 +45,13 @@ function Home() {
   };
 
   const handleAddItem = async (item: Item) => {
-    const body = {
-      date: moment(item.date).format("yyyy-MM-DD"),
-      category: item.category,
-      description: item.title,
-      value: item.value
-    }
+    // const body = {
+    //   date: moment(item.date).format("yyyy-MM-DD"),
+    //   category: item.category,
+    //   description: item.title,
+    //   value: item.value
+    // }
+    console.log(item.date)
     await axios
       .post("http://localhost:3003/user/registerexpense", {
         date: moment(item.date).format("yyyy-MM-DD"),

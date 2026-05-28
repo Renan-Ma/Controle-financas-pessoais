@@ -35,11 +35,13 @@ export default class FinanceController {
 
   getExpense = async (req: Request, res: Response) => {
     try {
-      const {date} = req.body;
+      const token = req.headers.authorization!;
 
-      // const result = await this.financeBusiness.getExpense(date);
+      const {date} = req.body;      
 
-      // res.status(201).send(result);
+      const result = await this.financeBusiness.getExpense(date, token);
+
+      res.status(201).send(result);
     } catch (error) {
       if (error instanceof Error) {
         return res.status(400).send(error.message);

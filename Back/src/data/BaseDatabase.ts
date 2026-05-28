@@ -8,7 +8,7 @@ export abstract class BaseDatabase {
   private static connection: Knex | null = null;
 
   protected getConnection(): Knex {
-    if (!BaseDatabase.connection) {
+    if (!BaseDatabase.connection) {    
       BaseDatabase.connection = knex({
         client: "mysql",
         connection: {

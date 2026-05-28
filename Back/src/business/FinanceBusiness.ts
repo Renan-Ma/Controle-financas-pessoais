@@ -1,3 +1,4 @@
+import moment from "moment";
 import FinanceDatabase from "../data/FinanceDatabase";
 import Expense from "../model/Expense";
 import { Authenticator } from "../services/Authenticator";
@@ -39,6 +40,33 @@ export default class FinanceBusiness {
 
     const response = await this.financeData.createExpense(expense)
 
-    return console.log(response)
+    return response
+  }
+
+  public getExpense = async (dateExpense: any, token: string) => {
+    const { date } = dateExpense;
+    // console.log(dateExpense)
+    if (!dateExpense) {
+      throw new Error("Campos inválidos")
+    }
+
+    if (!token) {
+      throw new Error("Para acessar essa funcionalidoda é necessario estar logado")
+    }
+
+    // console.log(dateExpense)
+
+    const authenticator = this.authenticator.getTokenData(token)
+    if (!authenticator) {
+      throw new Error("Token inválido")
+    }
+    const dateStart = moment(dateExpense).format("yyyy-MM-01")
+    const dateEnd = moment(dateExpense).format("yyyy-MM-30")
+
+    const author = authenticator.id
+
+    const response = await this.financeData.getExpense(dateStart, dateEnd, author)
+
+    return response
   }
 }
